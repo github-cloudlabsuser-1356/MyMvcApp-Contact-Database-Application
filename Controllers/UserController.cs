@@ -11,56 +11,104 @@ public class UserController : Controller
         // GET: User
         public ActionResult Index()
         {
-            // Implement the Index method here
+            return View(userlist); // Return a view with the user list
         }
 
         // GET: User/Details/5
         public ActionResult Details(int id)
         {
-            // Implement the details method here
+            var user = userlist.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(); // Return a 404 if the user is not found
+            }
+            return View(user); // Return the details view with the user data
         }
 
         // GET: User/Create
         public ActionResult Create()
         {
-            //Implement the Create method here
+            return View(); // Return the Create view
         }
 
         // POST: User/Create
         [HttpPost]
         public ActionResult Create(User user)
         {
-            // Implement the Create method (POST) here
+            if (user == null)
+            {
+                return BadRequest(); // Return a 400 Bad Request if the user is null
+            }
+
+            userlist.Add(user); // Add the new user to the user list
+            return RedirectToAction(nameof(Index)); // Redirect to the Index action
         }
 
         // GET: User/Edit/5
         public ActionResult Edit(int id)
         {
-            // This method is responsible for displaying the view to edit an existing user with the specified ID.
-            // It retrieves the user from the userlist based on the provided ID and passes it to the Edit view.
+            var user = userlist.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(); // Return a 404 if the user is not found
+            }
+            return View(user); // Return the Edit view with the user data
         }
 
         // POST: User/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, User user)
         {
-            // This method is responsible for handling the HTTP POST request to update an existing user with the specified ID.
-            // It receives user input from the form submission and updates the corresponding user's information in the userlist.
-            // If successful, it redirects to the Index action to display the updated list of users.
-            // If no user is found with the provided ID, it returns a HttpNotFoundResult.
-            // If an error occurs during the process, it returns the Edit view to display any validation errors.
+            if (user == null)
+            {
+                return BadRequest(); // Return a 400 Bad Request if the user is null
+            }
+
+            var existingUser = userlist.FirstOrDefault(u => u.Id == id);
+            if (existingUser == null)
+            {
+                return NotFound(); // Return a 404 if the user is not found
+            }
+
+            // Update the existing user's properties
+            existingUser.Name = user.Name;
+            existingUser.Email = user.Email;
+
+            return RedirectToAction(nameof(Index)); // Redirect to the Index action
         }
 
         // GET: User/Delete/5
         public ActionResult Delete(int id)
         {
-            // Implement the Delete method here
+            var user = userlist.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(); // Return a 404 if the user is not found
+            }
+            return View(user); // Return the Delete confirmation view with the user data
         }
 
         // POST: User/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, IFormCollection collection)
         {
-            // Implement the Delete method (POST) here
+            var user = userlist.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(); // Return a 404 if the user is not found
+            }
+
+            userlist.Remove(user); // Remove the user from the list
+            return RedirectToAction(nameof(Index)); // Redirect to the Index action
+        }
+
+        // GET: User/SearchByName
+        public IActionResult SearchByName(string query)
+        {
+            var results = userlist
+                .Where(u => u.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return View("SearchResults", results);
         }
 }

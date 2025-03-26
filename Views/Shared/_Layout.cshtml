@@ -23,9 +23,13 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Privacy" id="privacy-link">Privacy</a>
                         </li>
                     </ul>
+                    <form class="d-flex" role="search" asp-controller="User" asp-action="SearchByName" method="get">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Buscar" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -44,6 +48,12 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('privacy-link').addEventListener('click', function (event) {
+            event.preventDefault();
+            alert('Our privacy policy ensures your data is protected and used responsibly.');
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
