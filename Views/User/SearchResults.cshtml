@@ -1,0 +1,30 @@
+@model IEnumerable<MyMvcApp.Models.User>
+
+<h2>Resultados de la búsqueda</h2>
+
+@if (!Model.Any())
+{
+    <p>No se encontraron resultados para la búsqueda.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary">Detalles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
